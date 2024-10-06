@@ -1,0 +1,48 @@
+model Session {
+  id              Int       @id @default(autoincrement())
+  name            String
+  universe        String
+  level_required  Int?      @default(0)
+  synopsis        String
+  game_system     String
+  duration        Int       // Durée prévue en minutes
+  max_players     Int
+  current_players Int       @default(0)
+  status          SessionStatus @default(OPEN)
+  location        String?
+  virtual_tabletop String?
+  dm_id           Int
+  dm              User      @relation(fields: [dm_id], references: [id])
+  language        String
+  age_restriction Int?
+  experience_level ExperienceLevel @default(ALL)
+  tags            String[]
+  notes           String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  participants    SessionParticipant[]
+  proposed_dates  ProposedDate[]  // Nouvelle relation
+}
+
+enum SessionStatus {
+  OPEN
+  FULL
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ExperienceLevel {
+  ALL
+  BEGINNERS
+  INTERMEDIATE
+  ADVANCED
+}
+
+
+
+enum PlayerRole {
+  PLAYER
+  DM
+  SPECTATOR
+}
